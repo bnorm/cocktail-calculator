@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Cocktail Calculator</string>
+    <string-array name="units">
+        <item>US fluid oz</item>
+        <item>Milliliters</item>
+    </string-array>
+</resources>

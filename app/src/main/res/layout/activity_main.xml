@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginEnd="16dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginTop="16dp"
+    tools:context="com.bnorm.cocktailcalculator.ui.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/unit_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Units"
+        app:layout_constraintBottom_toBottomOf="@+id/unit"
+        app:layout_constraintEnd_toStartOf="@+id/unit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/unit" />
+
+    <Spinner
+        android:id="@+id/unit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/units"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/unit_title"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/ingredients_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Ingredients"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/unit" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/ingredients"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients_title" />
+    <!--tools:listitem="@layout/ingredient"-->
+
+    <Button
+        android:id="@+id/add_ingredient"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="More"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ingredients"
+        app:srcCompat="@drawable/ic_add_24dp" />
+
+    <TextView
+        android:id="@+id/technique_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="Technique"
+        app:layout_constraintBottom_toBottomOf="@+id/technique"
+        app:layout_constraintEnd_toStartOf="@+id/technique"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/technique" />
+
+    <Spinner
+        android:id="@+id/technique"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/technique_title"
+        app:layout_constraintTop_toBottomOf="@+id/add_ingredient" />
+
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:stretchColumns="0,1,2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/technique">
+
+        <TableRow>
+
+            <TextView
+                android:text="Attribute"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_span="2"
+                android:text="Results"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView android:text="Dilution from shaking/stirring (%)" />
+
+            <TextView
+                android:id="@+id/dilution_number"
+                android:text="0.0%" />
+
+            <TextView
+                android:id="@+id/dilution_result"
+                android:text="Underdiluted" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView android:text="Final Volume (oz or ml)" />
+
+            <TextView
+                android:id="@+id/volume_number"
+                android:text="0.0" />
+
+            <TextView
+                android:id="@+id/volume_result"
+                android:text="Not enough volume" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView android:text="Ethanol (%abv)" />
+
+            <TextView
+                android:id="@+id/ethanol_number"
+                android:text="0.0%" />
+
+            <TextView
+                android:id="@+id/ethanol_result"
+                android:text="Not enough ethanol" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView android:text="Sugar (g/100ml)" />
+
+            <TextView
+                android:id="@+id/sugar_number"
+                android:text="0.0" />
+
+            <TextView
+                android:id="@+id/sugar_result"
+                android:text="Not sweet enough" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView android:text="Acid (%)" />
+
+            <TextView
+                android:id="@+id/acid_number"
+                android:text="0.0%" />
+
+            <TextView
+                android:id="@+id/acid_result"
+                android:text="Not acidic enought" />
+        </TableRow>
+    </TableLayout>
+
+</android.support.constraint.ConstraintLayout>
