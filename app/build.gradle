@@ -44,10 +44,10 @@ dependencies {
 
     // android arch
     implementation "android.arch.lifecycle:extensions:1.0.0-alpha8"
-    implementation "android.arch.persistence.room:runtime:1.0.0-alpha8"
-    implementation "android.arch.persistence.room:rxjava2:1.0.0-alpha8"
     kapt "android.arch.lifecycle:compiler:1.0.0-alpha8"
-    kapt "android.arch.persistence.room:compiler:1.0.0-alpha8"
+
+    // firebase
+    compile 'com.google.firebase:firebase-database:11.0.4'
 
     // rxjava
     implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
@@ -64,3 +64,5 @@ kotlin {
         coroutines "enable"
     }
 }
+
+apply plugin: 'com.google.gms.google-services'

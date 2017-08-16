@@ -10,6 +10,8 @@ import com.bnorm.cocktailcalculator.data.RecipeComponent
 import com.bnorm.cocktailcalculator.data.RecipeResults
 import com.bnorm.cocktailcalculator.data.Techniques
 import com.bnorm.cocktailcalculator.lifecycleDestroy
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.itemSelections
 import io.reactivex.Observable
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : LifecycleActivity() {
 
     private var recipeViewModel: RecipeViewModel by lifecycleDestroy()
+    private var database: DatabaseReference by lifecycleDestroy()
     private var disposables: CompositeDisposable by lifecycleDestroy { it.dispose() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +33,7 @@ class MainActivity : LifecycleActivity() {
         setContentView(R.layout.activity_main)
 
         recipeViewModel = ViewModelProviders.of(this).get(RecipeViewModel::class.java)
+        database = FirebaseDatabase.getInstance().reference
         disposables = CompositeDisposable()
 
 

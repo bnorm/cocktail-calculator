@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.bnorm.cocktailcalculator.R
 import com.bnorm.cocktailcalculator.app
-import com.bnorm.cocktailcalculator.data.db.AppDatabase
 import com.bnorm.cocktailcalculator.data.db.Ingredient
+import com.bnorm.rx.firebase.child
+import com.bnorm.rx.firebase.children
 import com.jakewharton.rxbinding2.widget.AdapterViewItemClickEvent
 import com.jakewharton.rxbinding2.widget.itemClickEvents
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -30,7 +31,8 @@ class IngredientAdapter(
             subject.onNext(field)
         }
 
-    private val dbIngredients = context.app.db.ingredients().findAll()
+    private val dbIngredients = context.app.firebase.child("ingredients")
+            .children<Ingredient>()
             .subscribeOn(Schedulers.io())
             .map { it.map { it.name } }
             .cache()
@@ -55,21 +57,26 @@ class IngredientAmountViewHolder(
         context: Context,
         parent: ViewGroup,
         ingredients: Single<List<String>>
-) : ObservingAdapter.ViewHolder<IngredientAmount>(LayoutInflater.from(context).inflate(R.layout.ingredient, parent, false)) {
+) : ObservingAdapter.ViewHolder<IngredientAmount>(
+        LayoutInflater.from(context).inflate(R.layout.ingredient, parent, false)
+) {
 
-    private val db: AppDatabase = context.app.db
+    private val firebase = context.app.firebase
     private var ingredientAmount by Delegates.notNull<IngredientAmount>()
 
-    private val selectedIngredient = itemView.spinner.itemClickEvents()
+    private val selectedIngredient = itemView.ingredient.itemClickEvents()
             .flatMapMaybe {
-                db.ingredients().findByName(it.item as String)
+                firebase.child("ingredients")
+                        .orderByChild("name")
+                        .equalTo(it.item as String)
+                        .child<Ingredient>()
                         .subscribeOn(Schedulers.io())
             }
             .doOnNext { ingredientAmount.ingredient = it }
             .publish()
             .autoConnect()
 
-    private val amountChanges = itemView.textInputEditText.textChanges()
+    private val amountChanges = itemView.amount.textChanges()
             .filter { it.isNotEmpty() && it.toString() != "." }
             .map { it.toString().toDouble() }
             .doOnNext { ingredientAmount.amount = it }
@@ -81,14 +88,14 @@ class IngredientAmountViewHolder(
     init {
         val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        itemView.spinner.setAdapter(adapter)
+        itemView.ingredient.setAdapter(adapter)
         ingredients.subscribe { it -> adapter.addAll(it) }
 
         selectedIngredient
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { set(it) }
 
-        itemView.spinner.textChanges()
+        itemView.ingredient.textChanges()
                 .distinctUntilChanged()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { clear() }
@@ -99,9 +106,9 @@ class IngredientAmountViewHolder(
 
         update(item.ingredient)
         if (item.ingredient == null) {
-            itemView.spinner.setText("")
+            itemView.ingredient.setText("")
         }
-        itemView.textInputEditText.setText(item.amount.toString())
+        itemView.amount.setText(item.amount.toString())
     }
 
     private fun update(it: Ingredient?) {
@@ -112,17 +119,16 @@ class IngredientAmountViewHolder(
         }
     }
 
-    private fun set(it: Ingredient) {
-        itemView.spinner.setText(it.name, true)
-        itemView.textView31.text = "Ethanol: ${it.ethanol}"
-        itemView.textView41.text = "Sugar: ${it.sugar}"
-        itemView.textView5.text = "Acid: ${it.acid}"
+    private fun set(ingredient: Ingredient) {
+        itemView.ethanol.text = "Ethanol: ${ingredient.ethanol}"
+        itemView.sugar.text = "Sugar: ${ingredient.sugar}"
+        itemView.acid.text = "Acid: ${ingredient.acid}"
     }
 
     private fun clear() {
-        itemView.textView31.text = "Ethanol: --"
-        itemView.textView41.text = "Sugar: --"
-        itemView.textView5.text = "Acid: --"
+        itemView.ethanol.text = "Ethanol: --"
+        itemView.sugar.text = "Sugar: --"
+        itemView.acid.text = "Acid: --"
     }
 }
 

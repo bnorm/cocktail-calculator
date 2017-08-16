@@ -19,17 +19,17 @@
             app:layout_constraintGuide_percent="0.75" />
 
         <AutoCompleteTextView
-            android:id="@+id/spinner"
+            android:id="@+id/ingredient"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="Ingredient"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textInputEditText"
+            app:layout_constraintBaseline_toBaselineOf="@+id/amount"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/textInputEditText"
+            android:id="@+id/amount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -38,44 +38,44 @@
             android:imeOptions="flagNoExtractUi|actionDone"
             android:inputType="number|numberDecimal"
             android:selectAllOnFocus="true"
-            app:layout_constraintBaseline_toBaselineOf="@+id/spinner"
+            app:layout_constraintBaseline_toBaselineOf="@+id/ingredient"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toEndOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView31"
+            android:id="@+id/ethanol"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView3"
-            app:layout_constraintEnd_toStartOf="@+id/textView41"
+            app:layout_constraintEnd_toStartOf="@+id/sugar"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/amount" />
 
         <TextView
-            android:id="@+id/textView41"
+            android:id="@+id/sugar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView4"
-            app:layout_constraintEnd_toStartOf="@+id/textView5"
+            app:layout_constraintEnd_toStartOf="@+id/acid"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/textView31"
-            app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
+            app:layout_constraintStart_toEndOf="@+id/ethanol"
+            app:layout_constraintTop_toBottomOf="@+id/amount" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/acid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView5"
             app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@+id/textView41"
-            app:layout_constraintTop_toBottomOf="@+id/textInputEditText" />
+            app:layout_constraintStart_toEndOf="@+id/sugar"
+            app:layout_constraintTop_toBottomOf="@+id/amount" />
 
     </android.support.constraint.ConstraintLayout>
 
