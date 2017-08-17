@@ -2,7 +2,7 @@ package com.bnorm.cocktailcalculator.ui
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import com.bnorm.cocktailcalculator.data.db.Ingredient
+import com.bnorm.cocktailcalculator.data.model.Ingredient
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject

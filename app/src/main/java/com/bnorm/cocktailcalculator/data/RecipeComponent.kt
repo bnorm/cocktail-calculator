@@ -5,112 +5,73 @@ import android.view.View
 import android.widget.TextView
 import com.bnorm.cocktailcalculator.R
 
-enum class RecipeComponent {
-    Dilution {
-        override fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int
-                = view.color(expected.dilution, result.dilution)
+enum class RecipeComponent(
+        private val smaller: String,
+        private val larger: String
+) {
 
-        override fun format(value: Double): String
-                = "${round(value * 100)}%"
+    Dilution("Underdiluted", "Overdiluted") {
+        override val RecipeResults.value: Double get() = dilution
+        override val ExpectedResults.range: ClosedFloatingPointRange<Double> get() = dilution
 
-        override fun number(result: RecipeResults): String
-                = if (result.dilution == Double.NaN) "-" else format(result.dilution)
-
-        override fun message(expected: ExpectedResults, result: RecipeResults): String
-                = message(expected.dilution, result.dilution, "Underdiluted", "Overdiluted")
+        override fun format(value: Double): String = "${round(value * 100)}%"
     },
 
-    Volume {
-        override fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int
-                = view.color(expected.volume, result.volume)
+    Volume("Not enough volume", "Too much volume") {
+        override val RecipeResults.value: Double get() = volume
+        override val ExpectedResults.range: ClosedFloatingPointRange<Double> get() = volume
 
-        override fun format(value: Double): String
-                = "${round(value)}"
-
-        override fun number(result: RecipeResults): String
-                = if (result.volume == Double.NaN) "-" else format(result.volume)
-
-        override fun message(expected: ExpectedResults, result: RecipeResults): String
-                = message(expected.volume, result.volume, "Not enough volume", "Too much volume")
+        override fun format(value: Double): String = "${round(value)}"
     },
 
-    Ethanol {
-        override fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int
-                = view.color(expected.ethanol, result.ethanol)
+    Ethanol("Not enough ethanol", "Too much ethanol") {
+        override val RecipeResults.value: Double get() = ethanol
+        override val ExpectedResults.range: ClosedFloatingPointRange<Double> get() = ethanol
 
-        override fun format(value: Double): String
-                = "${round(value * 100)}%"
-
-        override fun number(result: RecipeResults): String
-                = if (result.ethanol == Double.NaN) "-" else format(result.ethanol)
-
-        override fun message(expected: ExpectedResults, result: RecipeResults): String
-                = message(expected.ethanol, result.ethanol, "Not enough ethanol", "Too much ethanol")
+        override fun format(value: Double): String = "${round(value * 100)}%"
     },
 
-    Sugar {
-        override fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int
-                = view.color(expected.sugar, result.sugar)
+    Sugar("Not sweet enough", "Too sweet") {
+        override val RecipeResults.value: Double get() = sugar
+        override val ExpectedResults.range: ClosedFloatingPointRange<Double> get() = sugar
 
-        override fun format(value: Double): String
-                = "${round(value)}"
-
-        override fun number(result: RecipeResults): String
-                = if (result.sugar == Double.NaN) "-" else format(result.sugar)
-
-        override fun message(expected: ExpectedResults, result: RecipeResults): String
-                = message(expected.sugar, result.sugar, "Not sweet enough", "Too sweet")
+        override fun format(value: Double): String = "${round(value)}"
     },
 
-    Acid {
-        override fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int
-                = view.color(expected.acid, result.acid)
+    Acid("Not acidic enough", "Too acidic") {
+        override val RecipeResults.value: Double get() = acid
+        override val ExpectedResults.range: ClosedFloatingPointRange<Double> get() = acid
 
-        override fun format(value: Double): String
-                = "${round(value * 100)}%"
-
-        override fun number(result: RecipeResults): String
-                = if (result.acid == Double.NaN) "-" else format(result.acid)
-
-        override fun message(expected: ExpectedResults, result: RecipeResults): String
-                = message(expected.acid, result.acid, "Not acidic enough", "Too acidic")
+        override fun format(value: Double): String = "${round(value * 100)}%"
     },
 
     // End of enumeration
     ;
 
-    fun set(expected: ExpectedResults, result: RecipeResults, numberView: TextView, messageView: TextView) {
-        numberView.text = number(result)
-        numberView.setBackgroundColor(color(numberView, expected, result))
-
-        messageView.text = message(expected, result)
-        messageView.setBackgroundColor(color(messageView, expected, result))
-    }
+    protected abstract val RecipeResults.value: Double
+    protected abstract val ExpectedResults.range: ClosedFloatingPointRange<Double>
 
     protected abstract fun format(value: Double): String
 
-    protected abstract fun number(result: RecipeResults): String
+    fun set(expected: ExpectedResults, result: RecipeResults, numberView: TextView, messageView: TextView) {
+        numberView.setBackgroundColor(color(numberView, expected, result))
+        numberView.text = if (result.value == Double.NaN) "-" else format(result.value)
 
-    protected abstract fun message(expected: ExpectedResults, result: RecipeResults): String
+        messageView.setBackgroundColor(color(messageView, expected, result))
+        messageView.text = when {
+            result.value in expected.range -> "Good (${format(expected.range.start)}-${format(expected.range.endInclusive)})"
+            result.value < expected.range.start -> "$smaller (<${format(expected.range.start)})"
+            result.value > expected.range.endInclusive -> "$larger (>${format(expected.range.endInclusive)})"
+            else -> "Undefined (${format(expected.range.start)}-${format(expected.range.endInclusive)})"
+        }
+    }
 
-    protected abstract fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int
-
-    protected fun message(range: ClosedFloatingPointRange<Double>,
-                          value: Double,
-                          smaller: String,
-                          larger: String): String {
-        return when {
-            value in range -> "Good (${format(range.start)}-${format(range.endInclusive)})"
-            value < range.start -> "$smaller (<${format(range.start)})"
-            value > range.endInclusive -> "$larger (>${format(range.endInclusive)})"
-            else -> "Undefined (${format(range.start)}-${format(range.endInclusive)})"
+    private fun color(view: View, expected: ExpectedResults, result: RecipeResults): Int {
+        return when (result.value) {
+            in expected.range -> ContextCompat.getColor(view.context, R.color.resultGood)
+            else -> ContextCompat.getColor(view.context, R.color.resultBad)
         }
     }
 
     protected fun round(num: Double) = Math.round(num * 100) / 100.0
-
-    protected fun <T : Comparable<T>> View.color(range: ClosedRange<T>, value: T) = when (value) {
-        in range -> ContextCompat.getColor(this.context, R.color.resultGood)
-        else -> ContextCompat.getColor(this.context, R.color.resultBad)
-    }
 }

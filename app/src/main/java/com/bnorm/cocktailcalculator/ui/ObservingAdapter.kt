@@ -45,11 +45,14 @@ abstract class ObservingAdapter<T, VH : ObservingAdapter.ViewHolder<T>>(
 }
 
 
-private class DiffCallback<T>(private val old: List<T>,
-                              private val new: List<T>,
-                              private val id: T.() -> Long)
-    : DiffUtil.Callback() {
+private class DiffCallback<T>(
+        private val old: List<T>,
+        private val new: List<T>,
+        private val id: T.() -> Long
+) : DiffUtil.Callback() {
+
     override fun getOldListSize() = old.size
+
     override fun getNewListSize() = new.size
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int)

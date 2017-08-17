@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.bnorm.cocktailcalculator.R
 import com.bnorm.cocktailcalculator.app
-import com.bnorm.cocktailcalculator.data.db.Ingredient
+import com.bnorm.cocktailcalculator.data.model.Ingredient
 import com.bnorm.rx.firebase.child
 import com.bnorm.rx.firebase.children
 import com.jakewharton.rxbinding2.widget.AdapterViewItemClickEvent
@@ -105,9 +105,7 @@ class IngredientAmountViewHolder(
         this.ingredientAmount = item
 
         update(item.ingredient)
-        if (item.ingredient == null) {
-            itemView.ingredient.setText("")
-        }
+        itemView.ingredient.setText(item.ingredient?.name ?: "")
         itemView.amount.setText(item.amount.toString())
     }
 

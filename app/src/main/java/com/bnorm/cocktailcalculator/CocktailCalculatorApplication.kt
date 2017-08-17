@@ -3,7 +3,7 @@ package com.bnorm.cocktailcalculator
 import android.app.Application
 import android.content.Context
 import android.view.View
-import com.bnorm.cocktailcalculator.data.db.ingredients
+import com.bnorm.cocktailcalculator.data.model.ingredients
 import com.bnorm.rx.firebase.singleValueEvent
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
