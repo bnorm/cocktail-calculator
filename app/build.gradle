@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.bnorm.cocktailcalculator"
         minSdkVersion 23
@@ -57,6 +57,7 @@ dependencies {
 
     // misc
     implementation 'com.jakewharton.timber:timber:4.5.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
 }
 
 kotlin {

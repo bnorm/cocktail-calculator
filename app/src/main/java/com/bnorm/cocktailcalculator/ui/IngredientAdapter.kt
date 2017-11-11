@@ -54,7 +54,7 @@ class IngredientAdapter(
 }
 
 class IngredientAmountViewHolder(
-        context: Context,
+        private val context: Context,
         parent: ViewGroup,
         ingredients: Single<List<String>>
 ) : ObservingAdapter.ViewHolder<IngredientAmount>(
@@ -83,7 +83,8 @@ class IngredientAmountViewHolder(
             .publish()
             .autoConnect()
 
-    val updates: Observable<Unit> = Observable.merge(selectedIngredient, amountChanges).map {}
+    val updates: Observable<IngredientAmount> = Observable.merge(selectedIngredient, amountChanges)
+            .map { ingredientAmount }
 
     init {
         val adapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item)
@@ -118,15 +119,15 @@ class IngredientAmountViewHolder(
     }
 
     private fun set(ingredient: Ingredient) {
-        itemView.ethanol.text = "Ethanol: ${ingredient.ethanol}"
-        itemView.sugar.text = "Sugar: ${ingredient.sugar}"
-        itemView.acid.text = "Acid: ${ingredient.acid}"
+        itemView.ethanol.text = context.getString(R.string.ethanol_display, ingredient.ethanol.toString())
+        itemView.sugar.text = context.getString(R.string.sugar_display, ingredient.sugar.toString())
+        itemView.acid.text = context.getString(R.string.acid_display, ingredient.acid.toString())
     }
 
     private fun clear() {
-        itemView.ethanol.text = "Ethanol: --"
-        itemView.sugar.text = "Sugar: --"
-        itemView.acid.text = "Acid: --"
+        itemView.ethanol.text = context.getString(R.string.ethanol_display, "--")
+        itemView.sugar.text = context.getString(R.string.sugar_display, "--")
+        itemView.acid.text = context.getString(R.string.acid_display, "--")
     }
 }
 

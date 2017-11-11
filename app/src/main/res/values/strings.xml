@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Cocktail Calculator</string>
+
+    <string name="ethanol_display">Ethanol: %s</string>
+    <string name="sugar_display">Sugar: %s</string>
+    <string name="acid_display">Acid: %s</string>
+
     <string-array name="units">
         <item>US fluid oz</item>
         <item>Milliliters</item>
